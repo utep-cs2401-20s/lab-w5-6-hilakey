@@ -5,8 +5,8 @@ public class SnakeGame {
     private int[] headPosition; /*Stores the location of the snake's head.*/
     private static int exhaustiveChecks; /*Counts # of positions checked using exhaustive searching.*/
     private static int recursiveChecks; /*Counts # of positions checked using recursive searching.*/
-    private int neighbors = 0; /*Counts how many neighbors cell has*/
-    private int[] tailFound;
+    private int neighbors; /*Counts how many neighbors cell has*/
+    private int[] tailFound; /*ran array that holds the position(x,y) of the tail and the snake length.*/
 
     /*Default Constructor*/
     public SnakeGame(){
@@ -30,11 +30,11 @@ public class SnakeGame {
 
     /*Getters*/
     private static int getRecursiveChecks(){ /*Gets the current state of the recursiveChecks counter.*/
-        return -1;
+        return recursiveChecks;
     }
 
     private static int getExhaustiveChecks(){ /*Gets the current state of the exhaustiveChecks counter.*/
-        return -1;
+        return exhaustiveChecks;
     }
     /*Methods*/
     private void resetCounters(){  /* resets both the exhaustiveChecks and recursiveChecks counters to 0.*/
@@ -45,10 +45,10 @@ public class SnakeGame {
 
     public int[] findTailExhaustive(){
         resetCounters();
-        neighbors = 0; /*neighbors resets to 0 for each cell being checked*/
 
         /*Start checking each cell of the board*/
         for(int i = 0; i < game.length; i++){
+            neighbors = 0; /*neighbors resets to 0 for each cell being checked*/
             for(int j = 0; j < game[0].length; j++){
                 exhaustiveChecks++; /*increases due to cell needing to be checked*/
                  /*Is this cell true?*/
