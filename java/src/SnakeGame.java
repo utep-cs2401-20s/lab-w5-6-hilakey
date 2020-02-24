@@ -113,7 +113,34 @@ public class SnakeGame {
             }
         }
         tailFound[2] = length; /*update TailFound with length of snake after search is complete.*/
+        System.out.println(getExhaustiveChecks());
         return tailFound;
+    }
+
+
+    public int[] findTailRecursive(){
+        resetCounters();
+        int previous[] = {0,0};
+        return  findTailRecursive(headPosition, previous);
+
+    }
+
+    private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
+        /*Saving current and previous position*/
+        int currX = currentPosition[0];
+        int currY = currentPosition[1];
+
+        int previousX = previousPosition[0];
+        int previousY = previousPosition[1];
+
+        /*BASE CASE*/
+        if(headPosition[0] != currX && headPosition[1] != currY && neighbors == 1){
+            
+        }
+
+
+
+
     }
 
 
