@@ -6,7 +6,7 @@ public class SnakeGame {
     private static int exhaustiveChecks; /*Counts # of positions checked using exhaustive searching.*/
     private static int recursiveChecks; /*Counts # of positions checked using recursive searching.*/
     private int neighbors; /*Counts how many neighbors cell has*/
-    private int[] tailFound; /*ran array that holds the position(x,y) of the tail and the snake length.*/
+    private int[] tailFound; /*an array that holds the position(x,y) of the tail and the snake length.*/
 
     /*Default Constructor*/
     public SnakeGame(){
@@ -15,15 +15,17 @@ public class SnakeGame {
 
     /*Constructor*/
     public SnakeGame(boolean[][] array, int x, int y){
+        headPosition = new int[2];
         this.headPosition[0] = x;
         this.headPosition[1] = y;
-        /*TODO: INITIALIZE game to array size (not guaranteed a square*/
         tailFound = new int[3];
-        length = 1; /*starting length is one due to head position already existing*/
+        length = 0; /*starting length is one due to head position already existing*/
+
+        this.game = new boolean[array.length][array[0].length];
 
         for(int i = 0; i < array.length; i++){
-            for(int j = 0; i < array[0].length; j++){
-                game[i][j] = array[i][j]; /*Copying initial array's contents to the board game.*/
+            for(int k = 0; k < array[0].length; k++){
+                this.game[i][k] = array[i][k]; /*Populating initial array's contents to the board game.*/
             }
         }
     }
@@ -33,62 +35,76 @@ public class SnakeGame {
         return recursiveChecks;
     }
 
-    private static int getExhaustiveChecks(){ /*Gets the current state of the exhaustiveChecks counter.*/
+   private static int getExhaustiveChecks(){ /*Gets the current state of the exhaustiveChecks counter.*/
         return exhaustiveChecks;
     }
     /*Methods*/
     private void resetCounters(){  /* resets both the exhaustiveChecks and recursiveChecks counters to 0.*/
         exhaustiveChecks = 0;
         recursiveChecks = 0;
-        length = 0;
     }
 
     public int[] findTailExhaustive(){
         resetCounters();
 
         /*Start checking each cell of the board*/
-        for(int i = 0; i < game.length; i++){
-            neighbors = 0; /*neighbors resets to 0 for each cell being checked*/
-            for(int j = 0; j < game[0].length; j++){
+        for(int i = 0; i < this.game.length; i++){
+            for(int k = 0; k < this.game[0].length; k++){
+                neighbors = 0; /*neighbors resets to 0 for each cell being checked*/
                 exhaustiveChecks++; /*increases due to cell needing to be checked*/
+
                  /*Is this cell true?*/
-                if(game[i][j] == true){
+                if(this.game[i][k] == true){
                     /*check if it has one or more neighbors*/
-                    if(j+1 < game[0].length){ /* LEFT SQUARE*/
-                        if(game[i][j+1] == true){
+                    if(k+1 < this.game[0].length){ /* LEFT SQUARE*/
+                        if(this.game[i][k+1] == true){
                             neighbors++;
                         }
                     }
-                    if(j-1 >= 0){ /*RIGHT SQUARE*/
-                        if(game[i][j-1] == true){
+                    if(k-1 >= 0){ /*RIGHT SQUARE*/
+                        if(this.game[i][k-1] == true){
                             neighbors++;
                         }
                     }
-                    if(i+1 < game.length){ /*BOTTOM SQUARE*/
-                        if(game[i+1][j] == true){
+                    if(i+1 < this.game.length){ /*BOTTOM SQUARE*/
+                        if(this.game[i+1][k] == true){
                             neighbors++;
                         }
                     }
                     if(i-1 >= 0){ /*TOP SQUARE*/
-                        if(game[i-1][j] == true){
+                        if(this.game[i-1][k] == true){
                             neighbors++;
                         }
                     }
+
+
+     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+                    /*If the cell has zero neighbors then the snake is the head AND tail itself and not valid.*/
+                    if(neighbors == 0){
+                        System.out.println("This snake is not valid.");
+                        tailFound[0] = headPosition[0];
+                        tailFound[1] = headPosition[1];
+                        length = 1;
+                        tailFound[2] = length;
+                        return tailFound;
+                    }
+
                     if(neighbors >= 1){
                         length++;
                     }
                     /*If the cell has 1 neighbor check if its either the head or tail*/
-                    if(i == headPosition[0] && j == headPosition[1] && neighbors == 1){
+                    if(i == headPosition[0] && k == headPosition[1] && neighbors == 1){
                         continue; /*it is not the tail*/
                     }
                     if(neighbors == 1){ /*update TailFound with tail position in array.*/
                         tailFound[0] = i;
-                        tailFound[1] = j;
+                        tailFound[1] = k;
                     }
                     /* If the cell has 2 or more neighbors it is neither the head or tail, continue on to next cell.*/
-                    if(neighbors >= 2){
+                    if(neighbors == 2){
                         continue;
                     }
+
 
                 }else{
                     /*If cell is false, move on to the next cell*/
