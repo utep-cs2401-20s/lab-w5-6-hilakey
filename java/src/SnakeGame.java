@@ -130,16 +130,52 @@ public class SnakeGame {
 
     private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
         recursiveChecks++;
-        int[] a = currentPosition; /* copying current position elements;*/
-        int[] b = previousPosition; /* copying previous position elements;*/
-        int i = a[0]; /*current x position*/
-        int k = a[1];/* current y position*/
+        int[] a = currentPosition;
+        int[] b = previousPosition;
+        int i = a[0]; /*holding current x position;*/
+        int k = a[1]; /*holding current y position;*/
+        System.out.println("Check is starting at game[" + i + "]" + "[" + k + "]");
 
+        if(i+1 < this.game.length){ //*BOTTOM SQUARE*//*
+            if(this.game[i+1][k] == true){
+                length++;
+                b = a;
+                a[0] = i+1;
+                return findTailRecursive(a,b);
 
+            }
+        }
+        if(k+1 < this.game[0].length){ //* RIGHT SQUARE*//*
+            if(this.game[i][k+1] == true){
+                length++;
+                b = a;
+                a[1] = k+1;
+                return findTailRecursive(a,b);
+            }
+        }
+        if(k-1 >= 0 && (b[0] != i && b[1] != k-1)){ //*LEFT SQUARE*//*
+            if(this.game[i][k-1] == true){
+                length++;
+                b = a;
+                a[1] = k-1;
+                return findTailRecursive(a,b);
+            }
+        }
+        if(i-1 >= 0 && (b[0] != i-1 && b[1] != k)){ //*TOP SQUARE*//*
+            if(this.game[i-1][k] == true){
+                length++;
+                b = a;
+                a[0] = i-1;
+                return findTailRecursive(a,b);
+            }
+        }
 
-
-
-
+        /* if all cases for neighbors fail, then it IS the tail.*/
+        length++;
+        foundWork[0] = i;
+        foundWork[1] = k;
+        foundWork[2] = length;
+        System.out.println("Tail is at " + foundWork[0] + "," + foundWork[1]);
 
         System.out.println("Number of recursive checks: " + getRecursiveChecks());
         return foundWork;
