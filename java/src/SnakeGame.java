@@ -7,6 +7,7 @@ public class SnakeGame {
     private static int recursiveChecks; /*Counts # of positions checked using recursive searching.*/
     private int neighbors; /*Counts how many neighbors cell has*/
     private int[] tailFound; /*an array that holds the position(x,y) of the tail and the snake length.*/
+    private int[] foundWork; /*an array that is a copy of tailFound but used in the findTailRecursive() method.*/
 
     /*Default Constructor*/
     public SnakeGame(){
@@ -19,6 +20,7 @@ public class SnakeGame {
         this.headPosition[0] = x;
         this.headPosition[1] = y;
         tailFound = new int[3];
+        foundWork = new int[3];
         length = 0; /*starting length is one due to head position already existing*/
 
         this.game = new boolean[array.length][array[0].length];
@@ -31,17 +33,18 @@ public class SnakeGame {
     }
 
     /*Getters*/
-    private static int getRecursiveChecks(){ /*Gets the current state of the recursiveChecks counter.*/
+    public static int getRecursiveChecks(){ /*Gets the current state of the recursiveChecks counter.*/
         return recursiveChecks;
     }
 
-   private static int getExhaustiveChecks(){ /*Gets the current state of the exhaustiveChecks counter.*/
+    public static int getExhaustiveChecks(){ /*Gets the current state of the exhaustiveChecks counter.*/
         return exhaustiveChecks;
     }
     /*Methods*/
     private void resetCounters(){  /* resets both the exhaustiveChecks and recursiveChecks counters to 0.*/
         exhaustiveChecks = 0;
         recursiveChecks = 0;
+        length = 0;
     }
 
     public int[] findTailExhaustive(){
@@ -56,12 +59,12 @@ public class SnakeGame {
                  /*Is this cell true?*/
                 if(this.game[i][k] == true){
                     /*check if it has one or more neighbors*/
-                    if(k+1 < this.game[0].length){ /* LEFT SQUARE*/
+                    if(k+1 < this.game[0].length){ /* RIGHT SQUARE*/
                         if(this.game[i][k+1] == true){
                             neighbors++;
                         }
                     }
-                    if(k-1 >= 0){ /*RIGHT SQUARE*/
+                    if(k-1 >= 0){ /*LEFT SQUARE*/
                         if(this.game[i][k-1] == true){
                             neighbors++;
                         }
@@ -113,37 +116,35 @@ public class SnakeGame {
             }
         }
         tailFound[2] = length; /*update TailFound with length of snake after search is complete.*/
-        System.out.println(getExhaustiveChecks());
+        System.out.println("Number of exhaustive checks: " + getExhaustiveChecks());
         return tailFound;
     }
 
 
     public int[] findTailRecursive(){
         resetCounters();
-        int previous[] = {0,0};
-        return  findTailRecursive(headPosition, previous);
+        return  findTailRecursive(headPosition, headPosition);
+
 
     }
 
     private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
-        /*Saving current and previous position*/
-        int currX = currentPosition[0];
-        int currY = currentPosition[1];
-
-        int previousX = previousPosition[0];
-        int previousY = previousPosition[1];
-
-        /*BASE CASE*/
-        if(headPosition[0] != currX && headPosition[1] != currY && neighbors == 1){
-            
-        }
+        recursiveChecks++;
+        int[] a = currentPosition; /* copying current position elements;*/
+        int[] b = previousPosition; /* copying previous position elements;*/
+        int i = a[0]; /*current x position*/
+        int k = a[1];/* current y position*/
 
 
 
+
+
+
+
+        System.out.println("Number of recursive checks: " + getRecursiveChecks());
+        return foundWork;
 
     }
-
-
 
 }
 

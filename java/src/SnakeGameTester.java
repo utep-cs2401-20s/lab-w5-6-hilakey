@@ -18,6 +18,7 @@ public class SnakeGameTester {
         SnakeGame test1 = new SnakeGame(a, 0, 1);
         /*expected array returned*/
         int[] result = {0, 1, 1};
+        System.out.println(test1.getExhaustiveChecks());
         assertArrayEquals(result, test1.findTailExhaustive());
 
     }
@@ -37,6 +38,7 @@ public class SnakeGameTester {
 
         SnakeGame test2 = new SnakeGame(b, 1,2);
         int[] result = {4, 3, 5};
+        System.out.println(test2.getExhaustiveChecks());
         assertArrayEquals(result, test2.findTailExhaustive());
     }
 
@@ -53,6 +55,7 @@ public class SnakeGameTester {
 
         SnakeGame test3 = new SnakeGame(c,3, 3);
         int[] result = {0, 0, 7};
+        System.out.println(test3.getExhaustiveChecks());
         assertArrayEquals(result, test3.findTailExhaustive());
     }
 
@@ -68,13 +71,14 @@ public class SnakeGameTester {
 
         SnakeGame test4 = new SnakeGame(d, 0,2);
         int[] result = {0,0,4};
+        System.out.println(test4.getExhaustiveChecks());
         assertArrayEquals(result, test4.findTailExhaustive());
         System.out.print("There is no barrier.");
     }
 
     /*Test #5
      * If the snakes head position is negative, then the method won't be able to differentiate the head and tail.
-     * In this case, it should return the incorrect tail position. I expect the test to fail.
+     * In this case, it should return the incorrect tail position.
      */
     @Test
     public void testFindTailExhaustive5(){
@@ -87,6 +91,7 @@ public class SnakeGameTester {
         SnakeGame test5 = new SnakeGame(e,-1,-2);
         /*Actual head position is [1,2]*/
         int[] result = {4,1,5};
+        System.out.println(test5.getExhaustiveChecks());
         assertArrayEquals(result,test5.findTailExhaustive());
         System.out.println("Test can't find tail.");
 
@@ -95,18 +100,42 @@ public class SnakeGameTester {
 
     /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
     /*Testing for findTailRecursive()*/
-    @Test
-    public void testFindTailRecursive1(){}
 
+    /*Test #1
+     * This test is a regular test case for a snake of length 3. It should return the array tailFound with the tail position and
+     * length.
+     */
+    @Test
+    public void testFindTailRecursive1(){
+        boolean[][] a = {{true, false, false},{true, true, false},{false, false, false}};
+        SnakeGame test1 = new SnakeGame(a,0,0 );
+        int[] result = {1, 1, 3};
+        assertArrayEquals(result,test1.findTailRecursive());
+    }
+
+
+
+    /*Test #2
+
+     */
     @Test
     public void testFindTailRecursive2(){}
 
+    /*Test #3
+
+     */
     @Test
     public void testFindTailRecursive3(){}
 
+    /*Test #5
+
+     */
     @Test
     public void testFindTailRecursive4(){}
 
+    /*Test #5
+
+     */
     @Test
     public void testFindTailRecursive5(){}
 
