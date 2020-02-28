@@ -8,6 +8,8 @@ public class SnakeGame {
     private int neighbors; /*Counts how many neighbors cell has*/
     private int[] tailFound; /*an array that holds the position(x,y) of the tail and the snake length.*/
     private int[] foundWork; /*an array that is a copy of tailFound but used in the findTailRecursive() method.*/
+    private int[] a; /* array that stores the position of the current cell being passed in the findTailRecursive() method.*/
+    private int[] b; /* array that stores the position of the previous cell being passed in the findTailRecursive() method.*/
 
     /*Default Constructor*/
     public SnakeGame(){
@@ -21,6 +23,9 @@ public class SnakeGame {
         this.headPosition[1] = y;
         tailFound = new int[3];
         foundWork = new int[3];
+        a = new int[2];
+        b = new int[2];
+
         length = 0; /*starting length is one due to head position already existing*/
 
         this.game = new boolean[array.length][array[0].length];
@@ -116,6 +121,7 @@ public class SnakeGame {
             }
         }
         tailFound[2] = length; /*update TailFound with length of snake after search is complete.*/
+        System.out.println("Tail is at " + tailFound[0] + "," + tailFound[1]);
         System.out.println("Number of exhaustive checks: " + getExhaustiveChecks());
         return tailFound;
     }
@@ -124,61 +130,78 @@ public class SnakeGame {
     public int[] findTailRecursive(){
         resetCounters();
         return  findTailRecursive(headPosition, headPosition);
-
-
     }
 
     private int[] findTailRecursive(int[] currentPosition, int[] previousPosition){
         recursiveChecks++;
-        int[] a = currentPosition;
-        int[] b = previousPosition;
-        int i = a[0]; /*holding current x position;*/
-        int k = a[1]; /*holding current y position;*/
-        System.out.println("Check is starting at game[" + i + "]" + "[" + k + "]");
+        a = currentPosition;
+        b = previousPosition;
+        int x = a[0]; /*holding current x position;*/
+        int y = a[1]; /*holding current y position;*/
+        System.out.println("Check is starting at game[" + x + "]" + "[" + y + "]");
+        System.out.println();
 
-        if(i+1 < this.game.length){ //*BOTTOM SQUARE*//*
-            if(this.game[i+1][k] == true){
+        if(x+1 < this.game.length){ //*BOTTOM SQUARE*//*
+            if( x+1 == b[0]){
+                System.out.println("PASS");
+            }
+            else if(this.game[x+1][y] == true){
                 length++;
-                b = a;
-                a[0] = i+1;
+                b = new int[]{x,y};
+                a = new int[]{x+1, y};
+                System.out.println("Previous position is now [" + b[0] + "]" + "[" + b[1] + "]");
+                System.out.println("Current position is now [" + a[0] + "]" + "[" + a[1] + "]");
+                System.out.println();
                 return findTailRecursive(a,b);
 
             }
         }
-        if(k+1 < this.game[0].length){ //* RIGHT SQUARE*//*
-            if(this.game[i][k+1] == true){
+        if(y+1 < this.game[x].length && b[1] != y+1){ //* RIGHT SQUARE*//*
+            if(this.game[x][y+1] == true){
                 length++;
-                b = a;
-                a[1] = k+1;
+                b = currentPosition;
+                a = new int[] {x, y+1};
+                System.out.println("Previous position is now [" + b[0] + "]" + "[" + b[1] + "]");
+                System.out.println("Current position is now [" + a[0] + "]" + "[" + a[1] + "]");
+                System.out.println();
                 return findTailRecursive(a,b);
             }
         }
-        if(k-1 >= 0 && (b[0] != i && b[1] != k-1)){ //*LEFT SQUARE*//*
-            if(this.game[i][k-1] == true){
+        if(y-1 >= 0 && b[1] != y-1){ //*LEFT SQUARE*//*
+            if(this.game[x][y-1] == true){
                 length++;
-                b = a;
-                a[1] = k-1;
+                b = currentPosition;
+                a = new int[]{x,y-1};
+                System.out.println("Previous position is now [" + b[0] + "]" + "[" + b[1] + "]");
+                System.out.println("Current position is now [" + a[0] + "]" + "[" + a[1] + "]");
+                System.out.println();
                 return findTailRecursive(a,b);
             }
         }
-        if(i-1 >= 0 && (b[0] != i-1 && b[1] != k)){ //*TOP SQUARE*//*
-            if(this.game[i-1][k] == true){
+        if(x-1 >= 0){ //*TOP SQUARE*//*
+            if(this.game[x-1][y] == true){
                 length++;
-                b = a;
-                a[0] = i-1;
+                b = currentPosition;
+                a = new int[]{x-1, y};
+                System.out.println("Previous position is now [" + b[0] + "]" + "[" + b[1] + "]");
+                System.out.println("Current position is now [" + a[0] + "]" + "[" + a[1] + "]");
+                System.out.println();
                 return findTailRecursive(a,b);
             }
         }
 
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
         /* if all cases for neighbors fail, then it IS the tail.*/
         length++;
-        foundWork[0] = i;
-        foundWork[1] = k;
-        foundWork[2] = length;
-        System.out.println("Tail is at " + foundWork[0] + "," + foundWork[1]);
 
         System.out.println("Number of recursive checks: " + getRecursiveChecks());
-        return foundWork;
+        if(getRecursiveChecks() == 1){
+            System.out.println("The snake is not valid.");
+        }
+        foundWork = new int[]{x,y,length};
+        System.out.println("Tail is at " + foundWork[0] + "," + foundWork[1]);
+
+        return  foundWork;
 
     }
 
